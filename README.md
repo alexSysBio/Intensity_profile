@@ -13,3 +13,14 @@ Once the plot_intensity_profiles_and_cells() function is run the user will have 
 
 ![image](https://github.com/user-attachments/assets/623eb748-ade5-4b8f-bc2d-668bf1bcdee1)
 
+By selecting an integer label as input:
+![image](https://github.com/user-attachments/assets/21c29d9a-e27d-436b-87a4-a5a3d6592b16)
+
+The medial axis will be drawn for the selected label:
+![image](https://github.com/user-attachments/assets/4fcfb3a9-348d-40f2-9f59-d9ec19212626)
+
+And the intensity profiles will be generated for the fluorescent channels:
+![image](https://github.com/user-attachments/assets/9283aab3-4899-4551-b878-6d52a5c474f7)
+
+
+
