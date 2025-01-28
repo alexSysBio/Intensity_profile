@@ -1,4 +1,10 @@
 # Intensity_profile
+
+Author: Alexandros Papagiannakis, HHMI @Stanford University, Christine Jacobs-Wagner lab, Sarafan ChEM-H, 2025
+
+## Please cite:
+
+
 This repository includes functions that can be used to generate intensity profiles from single cells.
 
 In otder to use this package first load the nd2 images using the function load_images() for a specified image directory.
