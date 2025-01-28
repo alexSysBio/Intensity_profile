@@ -8,7 +8,7 @@ DNA/polysome phase separation and cell width confinement couple nucleoid segrega
 Alexandros Papagiannakis, Qiwei Yu, Sander K. Govers, Wei-Hsiang Lin, Ned S. Wingreen, Christine Jacobs-Wagner
 doi: https://doi.org/10.1101/2024.10.08.617237
 
-
+## Instructions
 This repository includes functions that can be used to generate intensity profiles from single cells.
 
 In otder to use this package first load the nd2 images using the function load_images() for a specified image directory.
