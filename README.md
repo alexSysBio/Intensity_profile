@@ -2,7 +2,11 @@
 
 Author: Alexandros Papagiannakis, HHMI @Stanford University, Christine Jacobs-Wagner lab, Sarafan ChEM-H, 2025
 
-## Please cite:
+## Cite:
+https://www.biorxiv.org/content/10.1101/2024.10.08.617237v2.full
+DNA/polysome phase separation and cell width confinement couple nucleoid segregation to cell growth in Escherichia coli
+Alexandros Papagiannakis, Qiwei Yu, Sander K. Govers, Wei-Hsiang Lin, Ned S. Wingreen, Christine Jacobs-Wagner
+doi: https://doi.org/10.1101/2024.10.08.617237
 
 
 This repository includes functions that can be used to generate intensity profiles from single cells.
