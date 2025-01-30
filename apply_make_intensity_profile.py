@@ -82,8 +82,8 @@ def plot_intensity_profile(mean_intensity_df, channels, channel_labels, save_suf
     
 
 
-def get_intensity_profile(images, xy_position, timepoint, channels=['GFP', 'DAPI'],  
-                          channel_labels=['RplA-GFP', 'HupA-mCherry'], save_path=save_path):
+def get_intensity_profile(images, xy_position, timepoint, channels,  
+                          channel_labels, save_path):
     
     mean_int_df, phase_image, fluor_images_dict, cropped_cell_mask, crop_pad, lbl = get_mean_intensity_dataframe(images, xy_position, timepoint, save_path)
     
