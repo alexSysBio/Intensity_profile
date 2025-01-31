@@ -204,10 +204,13 @@ def get_intensity_profiles_for_all_labels(images, xy_position, timepoint, save_p
             mean_int_df, cropped_cell_mask, crop_pad, lbl = get_mean_intensity_dataframe(cell_label, phase_labels, 
                                                                                          bkg_cor_images_dict, save_path)
             mean_int_dict[lbl] = mean_int_df
+        
         except TypeError:
             print(f'Label {cell_label} is aborted because it does not correspond to a good segmentation instance or extends out-of-bounds and is aborted...')
         except ValueError:
             print(f'Label {cell_label} out-of-bounds and aborted...')
+        except IndexError:
+            print(f'Medial axis not drawn for label {cell_label} and aborted...')
     
     return mean_int_dict
 
