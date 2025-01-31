@@ -183,6 +183,8 @@ def plot_intensity_profiles_and_cells(images, xy_position, timepoint, channels, 
                                                                                                channels, channel_labels, save_suffix, save_path)
     plot_cell_images(phase_image, bkg_cor_images_dict, cropped_cell_mask, crop_pad, labeled_save_suffix, save_path)
 
+    mean_int_df.to_csv(save_path+'/'+labeled_save_suffix+'_intensity_profile_data.csv')
+    return mean_int_df
 
 
 def get_intensity_profile_stats(images, xy_position, timepoint, save_path):
@@ -207,48 +209,11 @@ def get_intensity_profile_stats(images, xy_position, timepoint, save_path):
             channel_images_dict[cell_label] = fluor_images_dict
             mean_int_dict[cell_label] = mean_int_df
         except TypeError:
-            print(f'Label {cell_label} is aborted because it does not correspond to a good segmentation instance...')
+            print(f'Label {cell_label} is aborted because it does not correspond to a good segmentation instance or extends out of bounds...')
         except ValueError:
             print(f'Label {cell_label} out-of-bounds and aborted...')
     
     return mean_int_dict, phase_images_dict, channel_images_dict
 
 
-
-# def get_intensity_profiles_for_many_frames(images, xy_positions = np.arange(1,10), time_points = [0,6,12,18,24,30,34,38,42]):
-    
-
-#     for xy_position in xy_positions:
-#         for timepoint in time_points:
-#             phase_labels = mint.get_otsu_mask(phase_image, min_area=20, max_area=5000)
-#             get_intensity_profile_stats(images, xy_position, timepoint, cell_label_list, save_path)
-            
-            
-#             for ch in channel_list:
-#                 fluor_images_dict = {}
-#                 if ch == 'Phase' or ch == 'Trans':
-#                     phase_image = mint.get_specific_image(images, xy_position, ch, timepoint)
-#                 else:
-#                     fluor_images_dict[ch] = mint.get_specific_image(images, xy_position, ch, timepoint)
-            
-#             phase_labels = mint.get_otsu_mask(phase_image, min_area=20, max_area=5000)
-            
-#             for ch in fluor_images_dict:
-#                 bkg_cor_image = bkg.back_sub(fluor_images_dict[ch], phase_labels>0, 
-#                                              dilation=35, estimation_step=128, smoothing_sigma=60, show=False)
-#                 fluor_images_dict[ch] = bkg_cor_image[0]
-                
-#             save_suffix = 'xy'+str(xy_position)+'_time'+str(timepoint)
-#             mint.plot_cell_labels(phase_labels, save_suffix, save_path)
-            
-#             for cell_label in np.unique(phase_labels.ravel()):
-#                 if cell_label > 0:
-            
-                
-#                 oned_df, crop_pad, cropped_cell_mask = mint.get_medial_axis_for_label(phase_labels, lbl, radius_px=8, half_angle=25, 
-#                                                                                  cap_knot=16, max_degree=30, verbose=True)
-# # plot_intensity_profiles_and_cells(images, xy_position, timepoint, save_path)
-            
-    
-    
     
