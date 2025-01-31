@@ -23,6 +23,7 @@ import numpy as np
 # images = mint.load_images(images_path)
 # channels=['GFP', 'DAPI']
 # channel_labels=['RplA-GFP', 'HupA-mCherry']                                                                                              
+# cell_label = 0
 
 
 
@@ -125,9 +126,8 @@ def plot_intensity_profile(mean_intensity_df, channels, channel_labels, save_suf
     
 
 
-def get_intensity_profile(phase_labels, bkg_cor_images_dict, channels, channel_labels, save_suffix, save_path):
+def get_intensity_profile(phase_labels, bkg_cor_images_dict, channels, channel_labels, cell_label, save_suffix, save_path):
     
-    cell_label = 0
     mean_int_df, cropped_cell_mask, crop_pad, lbl = get_mean_intensity_dataframe(cell_label, phase_labels, 
                                                                                  bkg_cor_images_dict, save_path)
     
@@ -174,16 +174,19 @@ def plot_cell_images(phase_image, fluor_images_dict, cropped_cell_mask, crop_pad
     
 
 
-def plot_intensity_profiles_and_cells(images, xy_position, timepoint, channels, channel_labels, save_path):
+def plot_intensity_profiles_and_cells(images, xy_position, timepoint, cell_label, channels, channel_labels, save_path):
     
     phase_labels, phase_image, bkg_cor_images_dict = get_segmented_labels_and_images(images, xy_position, timepoint, save_path)
     save_suffix = get_save_suffix(xy_position, timepoint)
     
     mean_int_df, cropped_cell_mask, crop_pad, lbl, labeled_save_suffix = get_intensity_profile(phase_labels, bkg_cor_images_dict, 
-                                                                                               channels, channel_labels, save_suffix, save_path)
+                                                                                               channels, channel_labels, 
+                                                                                               cell_label, save_suffix, save_path)
+    
     plot_cell_images(phase_image, bkg_cor_images_dict, cropped_cell_mask, crop_pad, labeled_save_suffix, save_path)
-
+    
     mean_int_df.to_csv(save_path+'/'+labeled_save_suffix+'_intensity_profile_data.csv')
+    
     return mean_int_df
 
 
@@ -236,5 +239,3 @@ def get_intensity_profiles_for_many_frames(images, xy_positions,
             pickle.dump(all_data_dict, handle)
     
     return all_data_dict
-
-    
