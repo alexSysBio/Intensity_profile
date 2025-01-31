@@ -142,7 +142,7 @@ def plot_cell_images(phase_image, fluor_images_dict, cropped_cell_mask, crop_pad
     cbar = plt.colorbar()
     cbar.set_label('Phase contrast (a.u.)', rotation=90)
     if os.path.isdir(save_path):
-        plt.savefig(save_path+'/'+save_suffix+'_phase_contrast_image.eps')
+        plt.savefig(save_path+'/'+save_suffix+'phase_contrast_image.eps')
     plt.show()
     
     
@@ -157,7 +157,7 @@ def plot_cell_images(phase_image, fluor_images_dict, cropped_cell_mask, crop_pad
         cbar = plt.colorbar()
         cbar.set_label(ch, rotation=90)
         if os.path.isdir(save_path):
-            plt.savefig(save_path+'/'+save_suffix+'_'+ch+'_phase_contrast_image.eps')
+            plt.savefig(save_path+'/'+save_suffix+'_'+ch+'_image.eps')
         plt.show()
 
 
