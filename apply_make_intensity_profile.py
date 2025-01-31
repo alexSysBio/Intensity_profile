@@ -7,19 +7,29 @@ HHMI at Stanford University, Christine Jacobs-Wagner lab, Sarafan ChEM-H, 2025
 
 """
 
+import os
 import make_intensity_profile as mint
 import matplotlib.pyplot as plt
-import os
 from skimage.measure import find_contours
 import uneven_background_correction as bkg
+import numpy as np
 
-
+# Examples of parameters
+# save_path= "/..._intensity_profiles"
+# images_path = "/...nd2"
 # xy_position = 3
 # timepoint = 0
-# # images = mint.load_images(images_path)
+# images = mint.load_images(images_path)
+# channels=['GFP', 'DAPI']
+# channel_labels=['RplA-GFP', 'HupA-mCherry']                                                                                        
 
 
-def get_mean_intensity_dataframe(images, xy_position, timepoint, save_path):
+def get_save_suffix(xy_position, timepoint):
+    return 'xy'+str(xy_position)+'_time'+str(timepoint)
+
+
+
+def get_segmented_labels_and_images(images, xy_position, timepoint, save_path):
     
     channel_list = images[3]
     fluor_images_dict = {}
@@ -37,9 +47,14 @@ def get_mean_intensity_dataframe(images, xy_position, timepoint, save_path):
                                      dilation=35, estimation_step=128, smoothing_sigma=60, show=False)
         fluor_images_dict[ch] = bkg_cor_image[0]
         
-    save_suffix = 'xy'+str(xy_position)+'_time'+str(timepoint)
+    save_suffix = get_save_suffix(xy_position, timepoint)
     mint.plot_cell_labels(phase_labels, save_suffix, save_path)
     
+    return phase_labels, phase_image, fluor_images_dict
+    
+
+
+def select_label():
     i = 0
     while i == 0:
         try:
@@ -48,16 +63,32 @@ def get_mean_intensity_dataframe(images, xy_position, timepoint, save_path):
             print('please choose a number')
             lbl = int(input('Choose the label number of the desired cell:'))
         i+=1
+    return lbl
+
+
+
+def get_mean_intensity_dataframe(cell_label, phase_labels, 
+                                 bkg_cor_images_dict, save_path, medial_axis_threshold=20):
     
+    if cell_label == 0:
+        lbl = select_label()
+    else:
+        lbl = cell_label
+        
     oned_df, crop_pad, cropped_cell_mask = mint.get_medial_axis_for_label(phase_labels, lbl, radius_px=8, half_angle=25, 
                                                                      cap_knot=16, max_degree=30, verbose=True)
     
-    for ch in fluor_images_dict:
-        oned_df = mint.get_oned_intensity(crop_pad, oned_df, cropped_cell_mask, fluor_images_dict[ch], ch)
+    if oned_df.width.abs().max() <= medial_axis_threshold:
     
-    mean_int_df = mint.get_intensity_profiles(oned_df, width_zone=6, bin_number="auto")
+        for ch in bkg_cor_images_dict:
+            oned_df = mint.get_oned_intensity(crop_pad, oned_df, cropped_cell_mask, bkg_cor_images_dict[ch], ch)
+        
+        mean_int_df = mint.get_intensity_profiles(oned_df, width_zone=6, bin_number="auto")
+        
+        return mean_int_df, cropped_cell_mask, crop_pad, lbl
     
-    return mean_int_df, phase_image, fluor_images_dict, cropped_cell_mask, crop_pad, lbl
+    else:
+        raise TypeError(f'This medial axis likely does not correspond to a real cell because it has a width above the specified width threshold of {medial_axis_threshold} pixels')
 
 
 
@@ -82,17 +113,16 @@ def plot_intensity_profile(mean_intensity_df, channels, channel_labels, save_suf
     
 
 
-def get_intensity_profile(images, xy_position, timepoint, channels,  
-                          channel_labels, save_path):
+def get_intensity_profile(phase_labels, bkg_cor_images_dict, channels, channel_labels, save_suffix, save_path):
     
-    mean_int_df, phase_image, fluor_images_dict, cropped_cell_mask, crop_pad, lbl = get_mean_intensity_dataframe(images, xy_position, timepoint, save_path)
+    cell_label = 0
+    mean_int_df, cropped_cell_mask, crop_pad, lbl = get_mean_intensity_dataframe(cell_label, phase_labels, 
+                                                                                 bkg_cor_images_dict, save_path)
     
-    save_suffix = 'xy'+str(xy_position)+'_time'+str(timepoint)+'_label'+str(lbl)
-    plot_intensity_profile(mean_int_df, channels, channel_labels, save_suffix, save_path)
+    labeled_save_suffix = save_suffix+'_label'+str(lbl)
+    plot_intensity_profile(mean_int_df, channels, channel_labels, labeled_save_suffix, save_path)
     
-    return mean_int_df, phase_image, fluor_images_dict, cropped_cell_mask, crop_pad, lbl, save_suffix
-
-
+    return mean_int_df, cropped_cell_mask, crop_pad, lbl, labeled_save_suffix
 
 
 
@@ -129,17 +159,25 @@ def plot_cell_images(phase_image, fluor_images_dict, cropped_cell_mask, crop_pad
         if os.path.isdir(save_path):
             plt.savefig(save_path+'/'+save_suffix+'_'+ch+'_phase_contrast_image.eps')
         plt.show()
-    
+
 
 
 def plot_intensity_profiles_and_cells(images, xy_position, timepoint, channels, channel_labels, save_path):
     
-    mean_int_df, phase_image, fluor_images_dict, cropped_cell_mask, crop_pad, lbl, save_suffix = get_intensity_profile(images, xy_position, timepoint, channels,  
-                                                                                                          channel_labels, save_path)
-    plot_cell_images(phase_image, fluor_images_dict, cropped_cell_mask, crop_pad, save_suffix, save_path)
-
+    phase_labels, phase_image, bkg_cor_images_dict = get_segmented_labels_and_images(images, xy_position, timepoint, save_path)
+    save_suffix = get_save_suffix(xy_position, timepoint)
     
-# plot_intensity_profiles_and_cells(images, xy_position, timepoint, save_path)
+    mean_int_df, cropped_cell_mask, crop_pad, lbl, labeled_save_suffix = get_intensity_profile(phase_labels, bkg_cor_images_dict, 
+                                                                                               channels, channel_labels, save_suffix, save_path)
+    plot_cell_images(phase_image, bkg_cor_images_dict, cropped_cell_mask, crop_pad, labeled_save_suffix, save_path)
+
+    return mean_int_df
+
+
+
+
+
+
             
     
     
