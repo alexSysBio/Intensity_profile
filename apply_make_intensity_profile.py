@@ -187,33 +187,29 @@ def plot_intensity_profiles_and_cells(images, xy_position, timepoint, channels, 
     return mean_int_df
 
 
-def get_intensity_profile_stats(images, xy_position, timepoint, save_path):
+
+def get_intensity_profiles_for_all_labels(images, xy_position, timepoint, save_path):
     
-    phase_images_dict = {}
-    channel_images_dict = {}
     mean_int_dict = {}
     
-    channel_list = images[3]
-    for ch in channel_list:
-        if ch == 'Phase' or ch == 'Trans':
-            phase_image = mint.get_specific_image(images, xy_position, ch, timepoint)
-    
-    phase_labels = mint.get_otsu_mask(phase_image, min_area=20, max_area=5000)
+    phase_labels, phase_image, bkg_cor_images_dict = get_segmented_labels_and_images(images, xy_position, timepoint, save_path)
+    # save_suffix = get_save_suffix(xy_position, timepoint)
+
     cell_label_list = list(np.unique(phase_labels.ravel()))
     cell_label_list.remove(0)
     
     for cell_label in cell_label_list:
+        print(f'Getting intensity profile for label {cell_label}...')
         try:
-            mean_int_df, phase_image, fluor_images_dict, cropped_cell_mask, crop_pad, lbl = get_mean_intensity_dataframe(images, xy_position, timepoint, cell_label, save_path)
-            phase_images_dict[cell_label] = phase_image
-            channel_images_dict[cell_label] = fluor_images_dict
-            mean_int_dict[cell_label] = mean_int_df
+            mean_int_df, cropped_cell_mask, crop_pad, lbl = get_mean_intensity_dataframe(cell_label, phase_labels, 
+                                                                                         bkg_cor_images_dict, save_path)
+            mean_int_dict[lbl] = mean_int_df
         except TypeError:
-            print(f'Label {cell_label} is aborted because it does not correspond to a good segmentation instance or extends out of bounds...')
+            print(f'Label {cell_label} is aborted because it does not correspond to a good segmentation instance or extends out-of-bounds and is aborted...')
         except ValueError:
             print(f'Label {cell_label} out-of-bounds and aborted...')
     
-    return mean_int_dict, phase_images_dict, channel_images_dict
+    return mean_int_dict
 
 
     
