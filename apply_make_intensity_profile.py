@@ -16,13 +16,13 @@ from skimage.measure import find_contours
 import uneven_background_correction as bkg
 import numpy as np
 
-# save_path= r"D:\Shares\Data_01\Alex Papagiannakis\Microscopy\Ribosome_synthesis_degradation_rates\Chloramphenicol\01242025_CJW7323_Ceph50_Chlor70_5min_int_intensity_profiles"
-# images_path = r"D:\Shares\Data_01\Alex Papagiannakis\Microscopy\Ribosome_synthesis_degradation_rates\Chloramphenicol\01242025_CJW7323_Ceph50_Chlor70_5min_int.nd2"
+# save_path= "/..._intensity_profiles"
+# images_path = "/...nd2"
 # xy_position = 3
 # timepoint = 0
 # images = mint.load_images(images_path)
 # channels=['GFP', 'DAPI']
-# channel_labels=['RplA-GFP', 'HupA-mCherry']                                                                                              channel_labels=['RplA-GFP', 'HupA-mCherry']
+# channel_labels=['RplA-GFP', 'HupA-mCherry']                                                                                              
 
 
 
