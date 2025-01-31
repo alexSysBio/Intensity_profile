@@ -132,10 +132,10 @@ def plot_cell_images(phase_image, fluor_images_dict, cropped_cell_mask, crop_pad
     
 
 
-def plot_intensity_profiles_and_cells(images, xy_position, timepoint, save_path):
+def plot_intensity_profiles_and_cells(images, xy_position, timepoint, channels, channel_labels, save_path):
     
-    mean_int_df, phase_image, fluor_images_dict, cropped_cell_mask, crop_pad, lbl, save_suffix = get_intensity_profile(images, xy_position, timepoint, channels=['GFP', 'DAPI'],  
-                                                                                                          channel_labels=['RplA-GFP', 'HupA-mCherry'], save_path=save_path)
+    mean_int_df, phase_image, fluor_images_dict, cropped_cell_mask, crop_pad, lbl, save_suffix = get_intensity_profile(images, xy_position, timepoint, channels,  
+                                                                                                          channel_labels, save_path)
     plot_cell_images(phase_image, fluor_images_dict, cropped_cell_mask, crop_pad, save_suffix, save_path)
 
     
