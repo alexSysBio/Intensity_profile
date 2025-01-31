@@ -190,6 +190,7 @@ def plot_intensity_profiles_and_cells(images, xy_position, timepoint, channels, 
 
 def get_intensity_profiles_for_all_labels(images, xy_position, timepoint, save_path):
     
+
     mean_int_dict = {}
     
     phase_labels, phase_image, bkg_cor_images_dict = get_segmented_labels_and_images(images, xy_position, timepoint, save_path)
@@ -204,7 +205,6 @@ def get_intensity_profiles_for_all_labels(images, xy_position, timepoint, save_p
             mean_int_df, cropped_cell_mask, crop_pad, lbl = get_mean_intensity_dataframe(cell_label, phase_labels, 
                                                                                          bkg_cor_images_dict, save_path)
             mean_int_dict[lbl] = mean_int_df
-        
         except TypeError:
             print(f'Label {cell_label} is aborted because it does not correspond to a good segmentation instance or extends out-of-bounds and is aborted...')
         except ValueError:
@@ -212,7 +212,29 @@ def get_intensity_profiles_for_all_labels(images, xy_position, timepoint, save_p
         except IndexError:
             print(f'Medial axis not drawn for label {cell_label} and aborted...')
     
+    if os.path.isdir(save_path):
+        with open(save_path+'/xy'+str(xy_position)+'_t'+str(timepoint)+'_intensity_profiles_dict', 'wb') as handle:
+            pickle.dump(mean_int_dict, handle)
+    
     return mean_int_dict
 
+
+
+def get_intensity_profiles_for_many_frames(images, xy_positions, 
+                                           time_points, save_path):
+    
+    all_data_dict = {}
+    
+    for xy_position in xy_positions:
+        all_data_dict[xy_position] = {}
+        for timepoint in time_points:
+            print(f'Analyzing xy position {xy_position} and time point {timepoint}...')
+            all_data_dict[xy_position][timepoint] = get_intensity_profiles_for_all_labels(images, xy_position, timepoint, save_path)
+    
+    if os.path.isdir(save_path):
+        with open(save_path+'/all_intensity_profiles_dict', 'wb') as handle:
+            pickle.dump(all_data_dict, handle)
+    
+    return all_data_dict
 
     
