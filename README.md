@@ -19,11 +19,11 @@ plot_intensity_profiles_and_cells(images, xy_position, timepoint, save_path)
 
 The save_path parameter is the path to the directory where the cell images and intensity profile will be stored.
 
-Once the plot_intensity_profiles_and_cells() function is run the user will have the opportubity to select the cell label for which they want to generate the intensity profile:
+<br> Once the plot_intensity_profiles_and_cells() function is run the user will have the opportubity to select the cell label for which they want to generate the intensity profile: </br>
 <img src="https://github.com/user-attachments/assets/623eb748-ade5-4b8f-bc2d-668bf1bcdee1" align="center" width="500"/>
 
 <br>By selecting an integer label as input:</br>
-<img src="https://github.com/user-attachments/assets/21c29d9a-e27d-436b-87a4-a5a3d6592b16" align="center" width="200"/>
+<img src="https://github.com/user-attachments/assets/21c29d9a-e27d-436b-87a4-a5a3d6592b16" align="center" width="500"/>
 
 <br>The medial axis will be drawn for the selected label:</br>
 <img src="https://github.com/user-attachments/assets/4fcfb3a9-348d-40f2-9f59-d9ec19212626" align="center" width="100"/>
