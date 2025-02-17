@@ -27,6 +27,7 @@ By selecting an integer label as input:
 ![image](https://github.com/user-attachments/assets/21c29d9a-e27d-436b-87a4-a5a3d6592b16)
 
 The medial axis will be drawn for the selected label:
+<img src="https://github.com/user-attachments/assets/4fcfb3a9-348d-40f2-9f59-d9ec19212626" align="center" width="100"/>
 ![image](https://github.com/user-attachments/assets/4fcfb3a9-348d-40f2-9f59-d9ec19212626)
 
 And the intensity profiles will be generated for the fluorescent channels:
