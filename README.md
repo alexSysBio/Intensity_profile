@@ -1,4 +1,4 @@
-# Intensity_profile
+# PyntensityProfile
 
 Author: Alexandros Papagiannakis, HHMI @Stanford University, Christine Jacobs-Wagner lab, Sarafan ChEM-H, 2025
 
